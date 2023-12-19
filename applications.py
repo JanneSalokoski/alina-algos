@@ -12,6 +12,12 @@ class Slot:
     def __init__(self, value: int) -> None:
         self.value = value
 
+    def __repr__(self):
+        return f"Slot {self.value}"
+
+    def __str__(self):
+        return self.__repr__()
+
 class SlotSpace:
     """Defines a range of possible slots"""
     def __init__(self, lo_bound: int, hi_bound: int) -> None:
@@ -30,7 +36,13 @@ class SlotSpace:
             degree = self.coeff * (slot.value - self.lo_bound)
             return f"hsv({degree}, 100, 100)"
 
-        raise ValueError(f"Slot {slot} not in range [{self.lo_bound},{self.hi_bound}]")
+        raise ValueError(f"Slot {slot} not in space {self}")
+
+    def __repr__(self):
+        return f"[{self.lo_bound}-{self.hi_bound}" 
+
+    def __str__(self):
+        return self.__repr__()
 
 class Application:
     """Implementation of a random application with an id and `amount` of slots"""
@@ -45,3 +57,17 @@ class Application:
             slots.append(self.slotspace.pull())
 
         return slots
+
+    def __repr__(self):
+        return f"{self.id}: {self.requested_slots}" 
+
+    def __str__(self):
+        return self.__repr__()
+
+def generate_applications(amount: int, slotspace: SlotSpace) -> list[Application]:
+    applications = []
+    for _ in range(amount):
+        applications.append(Application(amount=3, slotspace=slotspace))
+
+    return applications
+
