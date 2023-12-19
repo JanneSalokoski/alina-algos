@@ -2,11 +2,14 @@
 
 import uuid
 import random
+import pandas as pd
+import functools
 
 def generate_id(length: int) -> str:
     """Generate a random uuid and return last `length` characters from it"""
     return str(uuid.uuid4())[:length]
 
+@functools.total_ordering
 class Slot: 
     """Implementation of a slot: an item that can only be reserved once"""
     def __init__(self, value: int) -> None:
@@ -17,6 +20,21 @@ class Slot:
 
     def __str__(self):
         return self.__repr__()
+
+    def __eq__(self, other) -> bool:
+        if hasattr(other, "value"):
+            return self.value == other.value
+        
+        return self.value == other
+
+    def __lt__(self, other) -> bool:
+        if hasattr(other, "value"):
+            return self.value < other.value
+
+        return self.value < other
+
+    def __hash__(self):
+        return hash(self.__repr__())
 
 class SlotSpace:
     """Defines a range of possible slots"""
