@@ -50,11 +50,11 @@ class SlotSpace:
         return Slot(random.randint(self.lo_bound, self.hi_bound))
 
     def color(self, slot: Slot) -> str:
-        if slot.value >= self.lo_bound and slot.value <= self.hi_bound:
+        if slot is not None and slot.value >= self.lo_bound and slot.value <= self.hi_bound:
             degree = self.coeff * (slot.value - self.lo_bound)
             return f"hsv({degree}, 100, 100)"
 
-        raise ValueError(f"Slot {slot} not in space {self}")
+        return "hsv(0, 0, 0)"
 
     def __repr__(self):
         return f"[{self.lo_bound}-{self.hi_bound}]" 
