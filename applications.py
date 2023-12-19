@@ -57,7 +57,7 @@ class SlotSpace:
         raise ValueError(f"Slot {slot} not in space {self}")
 
     def __repr__(self):
-        return f"[{self.lo_bound}-{self.hi_bound}" 
+        return f"[{self.lo_bound}-{self.hi_bound}]" 
 
     def __str__(self):
         return self.__repr__()
@@ -69,12 +69,17 @@ class Application:
         self.slotspace = slotspace
         self.requested_slots = self.get_slots(amount)
 
+        self.reserved = None
+
     def get_slots(self, amount: int) -> list[Slot]:
         slots = []
         for _ in range(amount):
             slots.append(self.slotspace.pull())
 
         return slots
+
+    def reserve(self, slot: Slot) -> None:
+        self.reserved = slot
 
     def __repr__(self):
         return f"{self.id}: {self.requested_slots}" 
@@ -88,4 +93,18 @@ def generate_applications(amount: int, slotspace: SlotSpace) -> list[Application
         applications.append(Application(amount=3, slotspace=slotspace))
 
     return applications
+
+def generate_dataframe(applications: list[Application]) -> pd.DataFrame:
+    data = []
+    for application in applications:
+        data.append({
+            "id": application.id,
+            "request_1": application.requested_slots[0],
+            "request_2": application.requested_slots[1],
+            "request_3": application.requested_slots[2],
+            "reserved": application.reserved
+        })
+
+    return pd.DataFrame(data)
+
 
