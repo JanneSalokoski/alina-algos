@@ -35,12 +35,18 @@ def random_order(slotspace: applications.SlotSpace,
     print(f"\nReserved slots:\n{df}\n")
 
     counts = df["reserved"].value_counts(dropna=False)
-    none_amount = counts[None]
+
+    none_amount = 0
+    try:
+        none_amount = counts[None]
+    except Exception:
+        print(f"All applications have a reserved slot!")
+
     percent = none_amount / len(appls)
 
     print(f"Applications without a reserved slot: {none_amount} -> {percent*100:.2f}%")
 
-    return none_amount
+    return int(none_amount)
 
 def main():
     """Run `random_order` with some data"""
